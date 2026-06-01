@@ -2,7 +2,7 @@
   "version": 1,
   "constants": {
     "k": {
-      "value": 4.879999999999999,
+      "value": 5.440000000000001,
       "min": -10,
       "max": 10
     },
@@ -21,7 +21,7 @@
     {
       "text": "y=k",
       "color": "#FF6B6B",
-      "visible": false
+      "visible": true
     },
     {
       "text": "y=g*x",
@@ -126,6 +126,11 @@
     {
       "text": "",
       "color": "#98D8C8",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#F7B05E",
       "visible": true
     }
   ]
