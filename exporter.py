@@ -1,12 +1,4 @@
 # exporter.py
-"""
-Модуль экспорта и импорта формул для NeoDesmos.
-
-Поддерживаемые форматы:
-  Экспорт: JSON (.json), CSV (.csv), TXT (.txt), LaTeX (.tex), Clipboard
-  Импорт:  JSON (.json), CSV (.csv), TXT (.txt)
-"""
-
 import json
 import csv
 import re
@@ -14,10 +6,6 @@ import io
 from dataclasses import dataclass, field
 from typing import List, Dict, Optional, Tuple
 
-
-# ---------------------------------------------------------------------------
-# Структуры данных
-# ---------------------------------------------------------------------------
 
 @dataclass
 class FormulaEntry:

@@ -1,22 +1,7 @@
 # formula_converter.py
-"""
-Конвертер формул NeoDesmos → LaTeX / Python / Wolfram Alpha.
-Использует рекурсивный Pratt-парсер для корректной обработки
-дробей, степеней и вложенных скобок.
-
-Содержит:
-  formula_to_latex()   — основная функция конвертации
-  formula_to_python()  — нормализация в Python/NumPy
-  formula_to_wolfram() — синтаксис Wolfram Alpha
-  FormulaConverterDialog — диалоговое окно PySide6
-"""
-
 import re
 from typing import List, Optional
 
-# ═══════════════════════════════════════════════════════════════════════════════
-#  Токенизатор
-# ═══════════════════════════════════════════════════════════════════════════════
 
 _FUNCTIONS = {
     'sin','cos','tan','tg','cot','ctg','sec','csc',
