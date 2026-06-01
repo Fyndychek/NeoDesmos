@@ -52,7 +52,7 @@ class ConstantWidget(QWidget):
         self.spinbox.blockSignals(False)
         self.valueChanged.emit(self.name, value)
 
-    def on_spinbox_changed(self, val):
+    def on_spinbox_changed(self, value):
         self.slider.blockSignals(True)
         self.slider.setValue(self._value_to_slider(value))
         self.slider.blockSignals(False)

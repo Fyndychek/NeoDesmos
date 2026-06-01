@@ -2,17 +2,17 @@
   "version": 1,
   "constants": {
     "k": {
-      "value": -8.418,
+      "value": 34.0,
       "min": -10,
       "max": 10
     },
     "g": {
-      "value": 2.780000000000001,
+      "value": 2.26,
       "min": -10,
       "max": 10
     },
     "m": {
-      "value": -8.484,
+      "value": -208.0,
       "min": -10,
       "max": 10
     }
@@ -151,6 +151,16 @@
     {
       "text": "",
       "color": "#45B7D1",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#96CEB4",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#FFEAA7",
       "visible": true
     }
   ]
