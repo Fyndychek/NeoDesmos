@@ -330,7 +330,6 @@ class MainWindow(QMainWindow):
 
     def on_constant_changed(self, name, new_value):
         print(f"[DEBUG] Constant changed: {name} = {new_value}")
-        QMessageBox.information(self, "Debug", f"Константа {name} изменена на {new_value}")
         if new_value is None:
             if name in self.constants:
                 if name in self.constant_dependents:

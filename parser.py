@@ -46,10 +46,14 @@ class FunctionParser:
             identifiers = set(re.findall(r'\b[a-zA-Z]+\b', expr))
             print(f"[DEBUG] identifiers={identifiers}")
             reserved = set(['x', 'y', 'e', 'pi'] + list(self.functions.keys()))
-            unknown = identifiers - reserved
             known_constants = set(self.constants.keys())
-            unknown -= known_constants
-            used_constants.update(unknown)
+
+            # Все идентификаторы, которые являются известными константами
+            used_constants.update(identifiers & known_constants)
+            # Также можно добавить неизвестные (для диагностики)
+            unknown = identifiers - reserved - known_constants
+            if unknown:
+                used_constants.update(unknown)  # если хотите сохранить старое поведение для неизвестных
             print(f"[DEBUG] used_constants={used_constants}")
 
             has_var = bool(re.search(r'\b' + var + r'\b', expr))
