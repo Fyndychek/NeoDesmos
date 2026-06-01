@@ -2,7 +2,12 @@
   "version": 1,
   "constants": {
     "k": {
-      "value": 0.03,
+      "value": 7.640000000000001,
+      "min": -10,
+      "max": 10
+    },
+    "g": {
+      "value": 1.7599999999999998,
       "min": -10,
       "max": 10
     }
@@ -11,7 +16,7 @@
     {
       "text": "sin(x)",
       "color": "#F7B05E",
-      "visible": false
+      "visible": true
     },
     {
       "text": "y=k",
@@ -19,17 +24,12 @@
       "visible": true
     },
     {
-      "text": "",
+      "text": "y=g*x",
       "color": "#98D8C8",
       "visible": true
     },
     {
-      "text": "",
-      "color": "#F7B05E",
-      "visible": true
-    },
-    {
-      "text": "",
+      "text": "x=k*sin(y)",
       "color": "#98D8C8",
       "visible": true
     },
@@ -71,6 +71,36 @@
     {
       "text": "",
       "color": "#FFEAA7",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#DDA0DD",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#98D8C8",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#98D8C8",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#F7B05E",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#FF6B6B",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#4ECDC4",
       "visible": true
     }
   ]

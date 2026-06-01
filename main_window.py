@@ -138,10 +138,10 @@ class MainWindow(QMainWindow):
         add_btn.clicked.connect(self.add_function_cell)
         sidebar_layout.addWidget(add_btn)
 
-        update_all_btn = QPushButton("⟳ Обновить все графики")
-        update_all_btn.setMinimumHeight(32)
-        update_all_btn.clicked.connect(self.update_all_functions)
-        sidebar_layout.addWidget(update_all_btn)
+        #update_all_btn = QPushButton("⟳ Обновить все графики")
+        #update_all_btn.setMinimumHeight(32)
+        #update_all_btn.clicked.connect(self.update_all_functions)
+        #sidebar_layout.addWidget(update_all_btn)
 
         reset_view_btn = QPushButton("⌂ Сбросить масштаб")
         reset_view_btn.setMinimumHeight(32)
@@ -361,7 +361,7 @@ class MainWindow(QMainWindow):
             return
         for cid in self.constant_dependents[const_name].copy():
             print(f"[DEBUG] Will update cell {cid}")
-            if cid in self.cells:
+            if cid in self.cells and self.cells[cid].is_visible:
                 self.cells[cid].update_function()
 
     def update_cell_dependencies(self, cell_id, const_names):
@@ -450,6 +450,8 @@ class MainWindow(QMainWindow):
         if cell_id not in self.cells:
             return
         cell = self.cells[cell_id]
+        if not cell.is_visible:   # добавить проверку
+            return
         func = cell.get_function()
         if func is None:
             return
@@ -514,7 +516,7 @@ class MainWindow(QMainWindow):
 
         for cid in self.cells_order:
             cell = self.cells[cid]
-            if cell.get_func_str():
+            if cell.is_visible and cell.get_func_str():
                 self.update_single_function(cid)
 
         print("✓ Все функции обновлены для текущего масштаба")
