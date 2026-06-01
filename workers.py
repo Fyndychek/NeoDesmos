@@ -71,13 +71,13 @@ class FunctionWorker(QRunnable):
             width = abs(t_max - t_min)
             key = (t_min, t_max, self.precision_mode)
 
-            cached = self.get_from_cache(key)
-            if cached is not None:
-                print(f"[DEBUG] Cache hit for cell {self.cell_id}, key={key}")
-                if self._is_cancelled:
-                    return
-                self.signals.finished.emit(cached[0], cached[1], self.func_str, self.cell_id)
-                return
+            #cached = self.get_from_cache(key)
+            #if cached is not None:
+            #    print(f"[DEBUG] Cache hit for cell {self.cell_id}, key={key}")
+            #    if self._is_cancelled:
+             #       return
+              #  self.signals.finished.emit(cached[0], cached[1], self.func_str, self.cell_id)
+               # return
 
             if self.precision_mode:
                 if width > 100000:

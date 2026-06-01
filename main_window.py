@@ -50,8 +50,15 @@ class MainWindow(QMainWindow):
         self._setup_ui()
 
         # Загрузка автосохранения, если есть
+        autosave_loaded = False
         if os.path.exists(self.autosave_file):
             self.load_state(self.autosave_file, show_message=False)
+            autosave_loaded = True
+        if not autosave_loaded or len(self.cells) == 0:
+            self.add_function_cell()
+            first_cell = self.cells[self.cells_order[0]]
+            first_cell.function_input.setPlainText("sin(x)")
+            first_cell.update_function()
 
         self.add_function_cell()
         first_cell = self.cells[self.cells_order[0]]
@@ -114,15 +121,11 @@ class MainWindow(QMainWindow):
         sidebar_layout.setContentsMargins(5, 5, 5, 5)
 
         info_label = QLabel(
-            "✨ Поддерживается:\n"
-            "• Неявное умножение: 2x, x sin(x), (x+1)(x-1)\n"
-            "• Функции подсвечиваются голубым цветом\n"
-            "• Автоматическая отрисовка при вводе (задержка 0.5 сек)\n"
-            "• Автоматическое обновление при масштабировании\n"
-            "• Нажмите Enter для создания новой ячейки после текущей\n"
-            "• Неявные функции вида x = f(y) (например, x = y(1+cos(y)))\n"
-            "• Пользовательские константы: a = 3, b = -2.5 и т.п.\n\n"
-            "📝 Примеры:\n"
+            "Неявное умножение: 2x, x sin(x), (x+1)(x-1)\n"
+            "Автоматическая отрисовка при вводе (задержка 0.5 сек)\n"
+            "Автоматическое обновление при масштабировании\n"
+            "Неявные функции вида x = f(y) (например, x = y(1+cos(y)))\n"
+            "Пользовательские константы: a = 3, b = -2.5\n\n"
             "  y = sin(x)\n"
             "  x = y(1+cos(y))\n"
             "  2x sin(x)\n"
@@ -138,10 +141,10 @@ class MainWindow(QMainWindow):
         add_btn.clicked.connect(self.add_function_cell)
         sidebar_layout.addWidget(add_btn)
 
-        update_all_btn = QPushButton("⟳ Обновить все графики")
-        update_all_btn.setMinimumHeight(32)
-        update_all_btn.clicked.connect(self.update_all_functions)
-        sidebar_layout.addWidget(update_all_btn)
+        #update_all_btn = QPushButton("⟳ Обновить все графики")
+        #update_all_btn.setMinimumHeight(32)
+        #update_all_btn.clicked.connect(self.update_all_functions)
+        #sidebar_layout.addWidget(update_all_btn)
 
         reset_view_btn = QPushButton("⌂ Сбросить масштаб")
         reset_view_btn.setMinimumHeight(32)
@@ -264,8 +267,8 @@ class MainWindow(QMainWindow):
             # Восстанавливаем константы
             for name, const_data in data.get("constants", {}).items():
                 self.add_constant(name, const_data["value"],
-                                 const_data.get("min", -10),
-                                 const_data.get("max", 10))
+                                 const_data.get("min", -1000),
+                                 const_data.get("max", 1000))
 
             # Восстанавливаем ячейки
             for cell_data in data.get("cells", []):
@@ -277,6 +280,8 @@ class MainWindow(QMainWindow):
                 if not cell_data["visible"]:
                     cell.visible_checkbox.setChecked(False)
                 cell.update_function()
+            if self.cells:
+                self.next_cell_id = max(self.cells.keys()) + 1
 
             if show_message:
                 QMessageBox.information(self, "Загрузка", f"Загружено из {filepath}")
@@ -361,7 +366,7 @@ class MainWindow(QMainWindow):
             return
         for cid in self.constant_dependents[const_name].copy():
             print(f"[DEBUG] Will update cell {cid}")
-            if cid in self.cells:
+            if cid in self.cells and self.cells[cid].is_visible:
                 self.cells[cid].update_function()
 
     def update_cell_dependencies(self, cell_id, const_names):
@@ -450,6 +455,8 @@ class MainWindow(QMainWindow):
         if cell_id not in self.cells:
             return
         cell = self.cells[cell_id]
+        if not cell.is_visible:   # добавить проверку
+            return
         func = cell.get_function()
         if func is None:
             return
@@ -514,7 +521,7 @@ class MainWindow(QMainWindow):
 
         for cid in self.cells_order:
             cell = self.cells[cid]
-            if cell.get_func_str():
+            if cell.is_visible and cell.get_func_str():
                 self.update_single_function(cid)
 
         print("✓ Все функции обновлены для текущего масштаба")

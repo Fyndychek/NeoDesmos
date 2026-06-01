@@ -2,7 +2,32 @@
   "version": 1,
   "constants": {
     "k": {
-      "value": 0.03,
+      "value": 9.04,
+      "min": -10,
+      "max": 10
+    },
+    "g": {
+      "value": 4.32,
+      "min": -10,
+      "max": 10
+    },
+    "m": {
+      "value": 4.239999999999998,
+      "min": -10,
+      "max": 10
+    },
+    "r": {
+      "value": 8.919999999999998,
+      "min": -10,
+      "max": 10
+    },
+    "j": {
+      "value": 1.0600000000000005,
+      "min": -10,
+      "max": 10
+    },
+    "p": {
+      "value": 9.0,
       "min": -10,
       "max": 10
     }
@@ -19,58 +44,23 @@
       "visible": true
     },
     {
-      "text": "",
+      "text": "y=g*x",
       "color": "#98D8C8",
-      "visible": true
+      "visible": false
     },
     {
-      "text": "",
+      "text": "x=k*sin(y)",
+      "color": "#98D8C8",
+      "visible": false
+    },
+    {
+      "text": "tg(x)",
       "color": "#F7B05E",
       "visible": true
     },
     {
-      "text": "",
-      "color": "#98D8C8",
-      "visible": true
-    },
-    {
-      "text": "",
-      "color": "#F7B05E",
-      "visible": true
-    },
-    {
-      "text": "",
-      "color": "#FFEAA7",
-      "visible": true
-    },
-    {
-      "text": "",
-      "color": "#DDA0DD",
-      "visible": true
-    },
-    {
-      "text": "",
-      "color": "#FF6B6B",
-      "visible": true
-    },
-    {
-      "text": "",
-      "color": "#4ECDC4",
-      "visible": true
-    },
-    {
-      "text": "",
-      "color": "#45B7D1",
-      "visible": true
-    },
-    {
-      "text": "",
+      "text": "y=m*x+2x",
       "color": "#96CEB4",
-      "visible": true
-    },
-    {
-      "text": "",
-      "color": "#FFEAA7",
       "visible": true
     }
   ]

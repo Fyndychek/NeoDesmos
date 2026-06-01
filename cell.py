@@ -76,11 +76,11 @@ class FunctionCell(QFrame):
 
         self.highlighter = FunctionHighlighter(self.function_input.document())
 
-        self.update_btn = QPushButton("⟳")
-        self.update_btn.setFixedSize(30, 30)
-        self.update_btn.setToolTip("Обновить график")
-        self.update_btn.clicked.connect(self.update_function)
-        layout.addWidget(self.update_btn)
+        #self.update_btn = QPushButton("⟳")
+        #self.update_btn.setFixedSize(30, 30)
+        #self.update_btn.setToolTip("Обновить график")
+        #self.update_btn.clicked.connect(self.update_function)
+        #layout.addWidget(self.update_btn)
 
         self.color_btn = QPushButton("🎨")
         self.color_btn.setFixedSize(30, 30)
@@ -115,6 +115,8 @@ class FunctionCell(QFrame):
         self.is_visible = checked
         if self.on_toggle:
             self.on_toggle(self.cell_id, checked)
+        if checked:
+            self.update_function()
 
     def on_text_changed(self):
         if self._is_deleted:
