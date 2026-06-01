@@ -260,8 +260,8 @@ class MainWindow(QMainWindow):
             # Восстанавливаем константы
             for name, const_data in data.get("constants", {}).items():
                 self.add_constant(name, const_data["value"],
-                                 const_data.get("min", -10),
-                                 const_data.get("max", 10))
+                                 const_data.get("min", -1000),
+                                 const_data.get("max", 1000))
 
             # Восстанавливаем ячейки
             for cell_data in data.get("cells", []):

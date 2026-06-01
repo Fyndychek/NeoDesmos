@@ -40,10 +40,10 @@ class ConstantWidget(QWidget):
         self.setLayout(layout)
 
     def _value_to_slider(self, value):
-        return int((value - self.min_val) / (self.max_val - self.min_val) * 10000)
+        return int((value - self.min_val) / (self.max_val - self.min_val) * 1000)
 
     def _slider_to_value(self, slider_val):
-        return self.min_val + (slider_val / 10000) * (self.max_val - self.min_val)
+        return self.min_val + (slider_val / 1000) * (self.max_val - self.min_val)
 
     def on_slider_changed(self, val):
         value = self._slider_to_value(val)

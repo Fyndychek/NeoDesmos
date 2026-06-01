@@ -2,12 +2,17 @@
   "version": 1,
   "constants": {
     "k": {
-      "value": 5.440000000000001,
+      "value": -8.418,
       "min": -10,
       "max": 10
     },
     "g": {
       "value": 2.780000000000001,
+      "min": -10,
+      "max": 10
+    },
+    "m": {
+      "value": -8.484,
       "min": -10,
       "max": 10
     }
@@ -39,8 +44,13 @@
       "visible": true
     },
     {
+      "text": "y=m*x+2x",
+      "color": "#96CEB4",
+      "visible": true
+    },
+    {
       "text": "",
-      "color": "#FFEAA7",
+      "color": "#4ECDC4",
       "visible": true
     },
     {
@@ -131,6 +141,16 @@
     {
       "text": "",
       "color": "#F7B05E",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#FF6B6B",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#45B7D1",
       "visible": true
     }
   ]
