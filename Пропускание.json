@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "constants": {},
+  "cells": [
+    {
+      "text": "sin(x)",
+      "color": "#FF6B6B",
+      "visible": true
+    },
+    {
+      "text": "x=y(1+sin(y))",
+      "color": "#45B7D1",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#96CEB4",
+      "visible": true
+    }
+  ]
+}
