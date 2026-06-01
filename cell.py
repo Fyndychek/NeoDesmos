@@ -9,7 +9,7 @@ from utils import MONO_FONT, DEFAULT_COLORS
 class FunctionCell(QFrame):
     def __init__(self, cell_id, parser, on_remove, on_toggle, on_color_change,
                  on_update_request, on_enter_pressed, on_add_constant,
-                 on_dependencies_updated, parent=None):
+                 on_dependencies_updated, on_convert=None, parent=None):
         super().__init__(parent)
         self.cell_id = cell_id
         self.parser = parser
@@ -29,6 +29,7 @@ class FunctionCell(QFrame):
         self.curve_item = None
         self.used_constants = set()
         self._is_deleted = False
+        self.on_convert = on_convert
 
         self.typing_timer = QTimer()
         self.typing_timer.setSingleShot(True)
@@ -81,6 +82,12 @@ class FunctionCell(QFrame):
         #self.update_btn.setToolTip("Обновить график")
         #self.update_btn.clicked.connect(self.update_function)
         #layout.addWidget(self.update_btn)
+
+        self.convert_btn = QPushButton("∫")
+        self.convert_btn.setFixedSize(30, 30)
+        self.convert_btn.setToolTip("Конвертировать формулу (LaTeX, Python...)")
+        self.convert_btn.clicked.connect(self._on_convert_clicked)
+        layout.addWidget(self.convert_btn)
 
         self.color_btn = QPushButton("🎨")
         self.color_btn.setFixedSize(30, 30)
@@ -216,3 +223,8 @@ class FunctionCell(QFrame):
 
     def get_curve(self):
         return self.curve_item
+
+    def _on_convert_clicked(self):
+        if self.on_convert:
+            formula = self.function_input.toPlainText().strip()
+            self.on_convert(formula)

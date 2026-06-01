@@ -5,7 +5,7 @@ import numpy as np
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QScrollArea, QLabel, QFrame, QCheckBox,
-    QFileDialog, QMessageBox, QMenuBar, QMenu
+    QFileDialog, QMessageBox, QMenuBar, QMenu, QApplication
 )
 from PySide6.QtCore import QThreadPool, QTimer, QMutex, QMutexLocker, Qt
 import pyqtgraph as pg
@@ -14,6 +14,14 @@ from cell import FunctionCell
 from constants_widget import ConstantWidget
 from parser import FunctionParser
 from workers import FunctionWorker
+
+from formula_converter import FormulaConverterDialog
+from exporter import (
+    Exporter, Importer,
+    project_data_from_window, apply_project_data_to_window,
+)
+
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -79,6 +87,42 @@ class MainWindow(QMainWindow):
         save_action.triggered.connect(self.save_project_as)
 
         file_menu.addSeparator()
+
+        # ── Подменю Экспорт ──────────────────────────────────────
+        export_menu = file_menu.addMenu("Экспорт")
+
+        export_csv_action = export_menu.addAction("Экспорт в CSV (.csv)...")
+        export_csv_action.triggered.connect(self.export_csv)
+
+        export_txt_action = export_menu.addAction("Экспорт в TXT (.txt)...")
+        export_txt_action.triggered.connect(self.export_txt)
+
+        export_latex_action = export_menu.addAction("Экспорт в LaTeX (.tex)...")
+        export_latex_action.triggered.connect(self.export_latex)
+
+        export_clipboard_action = export_menu.addAction("Копировать формулы в буфер")
+        export_clipboard_action.triggered.connect(self.export_clipboard)
+
+        # ── Подменю Импорт ──────────────────────────────────────
+        import_menu = file_menu.addMenu("Импорт")
+
+        import_json_action = import_menu.addAction("Импорт из JSON (.json)...")
+        import_json_action.triggered.connect(self.import_json)
+
+        import_csv_action = import_menu.addAction("Импорт из CSV (.csv)...")
+        import_csv_action.triggered.connect(self.import_csv)
+
+        import_txt_action = import_menu.addAction("Импорт из TXT (.txt)...")
+        import_txt_action.triggered.connect(self.import_txt)
+
+        file_menu.addSeparator()
+        tools_menu = menubar.addMenu("Инструменты")
+
+        converter_action = tools_menu.addAction("Конвертер формул...")
+        converter_action.setShortcut("Ctrl+Shift+C")
+        converter_action.triggered.connect(self.open_formula_converter)
+
+
 
         exit_action = file_menu.addAction("Выход")
         exit_action.triggered.connect(self.close)
@@ -307,6 +351,141 @@ class MainWindow(QMainWindow):
         if filepath:
             self.load_state(filepath)
 
+    def open_formula_converter(self, initial_formula=None):
+        """Открывает диалог конвертера формул."""
+        # Qt-сигнал triggered передаёт bool — игнорируем его
+        if not isinstance(initial_formula, str):
+            initial_formula = ''
+
+        # Собираем все непустые формулы для выпадающего списка
+        all_formulas = []
+        for cid in self.cells_order:
+            text = self.cells[cid].function_input.toPlainText().strip()
+            if text:
+                all_formulas.append(text)
+
+        dlg = FormulaConverterDialog(
+            initial_formula=initial_formula,
+            all_formulas=all_formulas,
+            parent=self
+        )
+        dlg.exec()
+
+
+
+    # ---------- Экспорт -------------------------------------------------
+
+    def export_csv(self):
+        filepath, _ = QFileDialog.getSaveFileName(
+            self, "Экспорт в CSV", "", "CSV files (*.csv)"
+        )
+        if filepath:
+            try:
+                data = project_data_from_window(self)
+                Exporter.to_csv(data, filepath)
+                QMessageBox.information(self, "Экспорт", f"Сохранено в {filepath}")
+            except Exception as e:
+                QMessageBox.critical(self, "Ошибка экспорта", str(e))
+
+    def export_txt(self):
+        filepath, _ = QFileDialog.getSaveFileName(
+            self, "Экспорт в TXT", "", "Text files (*.txt)"
+        )
+        if filepath:
+            try:
+                data = project_data_from_window(self)
+                Exporter.to_txt(data, filepath)
+                QMessageBox.information(self, "Экспорт", f"Сохранено в {filepath}")
+            except Exception as e:
+                QMessageBox.critical(self, "Ошибка экспорта", str(e))
+
+    def export_latex(self):
+        filepath, _ = QFileDialog.getSaveFileName(
+            self, "Экспорт в LaTeX", "", "LaTeX files (*.tex)"
+        )
+        if filepath:
+            try:
+                data = project_data_from_window(self)
+                Exporter.to_latex(data, filepath)
+                QMessageBox.information(self, "Экспорт", f"Сохранено в {filepath}")
+            except Exception as e:
+                QMessageBox.critical(self, "Ошибка экспорта", str(e))
+
+    def export_clipboard(self):
+        try:
+            data = project_data_from_window(self)
+            text = Exporter.to_clipboard_text(data)
+            QApplication.clipboard().setText(text)
+            QMessageBox.information(self, "Буфер обмена", "Формулы скопированы в буфер обмена.")
+        except Exception as e:
+            QMessageBox.critical(self, "Ошибка", str(e))
+
+    # ---------- Импорт --------------------------------------------------
+
+    def _do_import(self, filepath: str):
+        """Общая логика импорта — спрашивает, заменить или добавить."""
+        data = Importer.from_file(filepath)
+
+        if self.cells:
+            reply = QMessageBox.question(
+                self,
+                "Импорт",
+                "Заменить текущие формулы или добавить к существующим?",
+                QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel,
+                QMessageBox.Yes,
+            )
+            # Yes = заменить, No = добавить, Cancel = отмена
+            if reply == QMessageBox.Cancel:
+                return
+            if reply == QMessageBox.Yes:
+                apply_project_data_to_window(data, self)
+            else:
+                # Режим добавления: только ячейки, без замены констант
+                from parser import FunctionParser
+                for entry in data.cells:
+                    cell_id = self.add_function_cell()
+                    cell = self.cells[cell_id]
+                    cell.function_input.setPlainText(entry.text)
+                    cell.color = entry.color
+                    cell.update_color_button()
+                    if not entry.visible:
+                        cell.visible_checkbox.setChecked(False)
+                    cell.update_function()
+        else:
+            apply_project_data_to_window(data, self)
+
+        QMessageBox.information(self, "Импорт", f"Загружено из {filepath}")
+
+    def import_json(self):
+        filepath, _ = QFileDialog.getOpenFileName(
+            self, "Импорт из JSON", "", "JSON files (*.json)"
+        )
+        if filepath:
+            try:
+                self._do_import(filepath)
+            except Exception as e:
+                QMessageBox.critical(self, "Ошибка импорта", str(e))
+
+    def import_csv(self):
+        filepath, _ = QFileDialog.getOpenFileName(
+            self, "Импорт из CSV", "", "CSV files (*.csv)"
+        )
+        if filepath:
+            try:
+                self._do_import(filepath)
+            except Exception as e:
+                QMessageBox.critical(self, "Ошибка импорта", str(e))
+
+    def import_txt(self):
+        filepath, _ = QFileDialog.getOpenFileName(
+            self, "Импорт из TXT", "", "Text files (*.txt)"
+        )
+        if filepath:
+            try:
+                self._do_import(filepath)
+            except Exception as e:
+                QMessageBox.critical(self, "Ошибка импорта", str(e))
+
     # ---------- Управление константами ----------
     def add_constant(self, name, value, min_val=-10, max_val=10):
         if name in self.constants:
@@ -393,8 +572,9 @@ class MainWindow(QMainWindow):
             on_update_request=self.update_single_function,
             on_enter_pressed=self.insert_function_cell_after,
             on_add_constant=self.add_constant,
-            on_dependencies_updated=self.update_cell_dependencies
-        )
+            on_dependencies_updated=self.update_cell_dependencies,
+            on_convert=self.open_formula_converter,
+            )
 
         self.cells[cell_id] = cell
         self.cell_data[cell_id] = {'x': None, 'y': None}
