@@ -50,8 +50,15 @@ class MainWindow(QMainWindow):
         self._setup_ui()
 
         # Загрузка автосохранения, если есть
+        autosave_loaded = False
         if os.path.exists(self.autosave_file):
             self.load_state(self.autosave_file, show_message=False)
+            autosave_loaded = True
+        if not autosave_loaded or len(self.cells) == 0:
+            self.add_function_cell()
+            first_cell = self.cells[self.cells_order[0]]
+            first_cell.function_input.setPlainText("sin(x)")
+            first_cell.update_function()
 
         self.add_function_cell()
         first_cell = self.cells[self.cells_order[0]]
@@ -273,6 +280,8 @@ class MainWindow(QMainWindow):
                 if not cell_data["visible"]:
                     cell.visible_checkbox.setChecked(False)
                 cell.update_function()
+            if self.cells:
+                self.next_cell_id = max(self.cells.keys()) + 1
 
             if show_message:
                 QMessageBox.information(self, "Загрузка", f"Загружено из {filepath}")
