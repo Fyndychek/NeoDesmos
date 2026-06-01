@@ -317,7 +317,7 @@ class MainWindow(QMainWindow):
             widget.slider.setValue(widget._value_to_slider(value))
             widget.blockSignals(False)
             self._pending_const_updates.add(name)
-            self._const_update_timer.start(100)
+            self._const_update_timer.start(10)
         else:
             widget = ConstantWidget(name, value, min_val, max_val)
             widget.valueChanged.connect(self.on_constant_changed)
@@ -350,7 +350,7 @@ class MainWindow(QMainWindow):
             if name in self.constants:
                 self.constants[name]['value'] = new_value
                 self._pending_const_updates.add(name)
-                self._const_update_timer.start(100)
+                self._const_update_timer.start(10)
                 FunctionWorker.clear_cache()
 
     def _batch_update_dependents(self):
