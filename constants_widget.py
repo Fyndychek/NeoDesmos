@@ -1,5 +1,5 @@
 # constants_widget.py
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel, QSlider, QSpinBox, QPushButton
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel, QSlider, QSpinBox, QPushButton, QDoubleSpinBox
 from PySide6.QtCore import Signal, Qt
 
 class ConstantWidget(QWidget):
@@ -25,10 +25,10 @@ class ConstantWidget(QWidget):
         self.slider.valueChanged.connect(self.on_slider_changed)
         layout.addWidget(self.slider)
 
-        self.spinbox = QSpinBox()
-        self.spinbox.setRange(int(self.min_val * 100), int(self.max_val * 100))
-        self.spinbox.setValue(int(initial_value * 100))
-        self.spinbox.setSingleStep(10)
+        self.spinbox = QDoubleSpinBox()
+        self.spinbox.setRange(self.min_val, self.max_val)
+        self.spinbox.setValue(initial_value)
+        self.spinbox.setSingleStep(0.01)
         self.spinbox.valueChanged.connect(self.on_spinbox_changed)
         layout.addWidget(self.spinbox)
 
@@ -48,12 +48,11 @@ class ConstantWidget(QWidget):
     def on_slider_changed(self, val):
         value = self._slider_to_value(val)
         self.spinbox.blockSignals(True)
-        self.spinbox.setValue(int(value * 100))
+        self.spinbox.setValue(value)
         self.spinbox.blockSignals(False)
         self.valueChanged.emit(self.name, value)
 
     def on_spinbox_changed(self, val):
-        value = val / 100.0
         self.slider.blockSignals(True)
         self.slider.setValue(self._value_to_slider(value))
         self.slider.blockSignals(False)
