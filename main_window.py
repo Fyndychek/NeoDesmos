@@ -213,7 +213,7 @@ class MainWindow(QMainWindow):
 
     def on_range_changed(self):
         if not self._update_timer.isActive():
-            self._update_timer.start(500)
+            self._update_timer.start(100)
 
     def on_precision_toggled(self, checked):
         self.precision_mode = checked
