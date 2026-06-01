@@ -11,7 +11,7 @@ class ConstantWidget(QWidget):
         self.min_val = min_val
         self.max_val = max_val
         self._setup_ui(initial_value)
-
+    
     def _setup_ui(self, initial_value):
         layout = QHBoxLayout()
         layout.setContentsMargins(2, 2, 2, 2)

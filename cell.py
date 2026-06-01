@@ -139,6 +139,7 @@ class FunctionCell(QFrame):
         return super().eventFilter(obj, event)
 
     def update_function(self):
+        print("[DEBUG] Cell {self.cell_id} update_function started, func_str={self.function_input.toPlainText().strip()}")
         if self._is_deleted:
             return
 
@@ -151,6 +152,7 @@ class FunctionCell(QFrame):
             name = const_match.group(1).lower()
             if name not in ('x', 'y'):
                 value = float(const_match.group(2))
+                print(f"[DEBUG] Константа распознана: {name}={value}")  # добавьте  
                 if self.on_add_constant:
                     self.on_add_constant(name, value)
                 if self.on_remove:
@@ -160,6 +162,7 @@ class FunctionCell(QFrame):
         self.func_str = func_str
         self.func, processed_str, self.is_implicit, used_constants, error = self.parser.parse(func_str)
         self.used_constants = used_constants
+        print(f"[DEBUG] Cell {self.cell_id} used_constants = {used_constants}")
 
         if self.on_dependencies_updated:
             self.on_dependencies_updated(self.cell_id, used_constants)

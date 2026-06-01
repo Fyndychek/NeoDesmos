@@ -326,9 +326,11 @@ class MainWindow(QMainWindow):
             for cell_id, cell in self.cells.items():
                 if name in cell.used_constants:
                     self.constant_dependents[name].add(cell_id)
-                    self.update_single_function(cell_id)
+                    cell.update_function()
 
     def on_constant_changed(self, name, new_value):
+        print(f"[DEBUG] Constant changed: {name} = {new_value}")
+        QMessageBox.information(self, "Debug", f"Константа {name} изменена на {new_value}")
         if new_value is None:
             if name in self.constants:
                 if name in self.constant_dependents:
@@ -348,17 +350,20 @@ class MainWindow(QMainWindow):
                 FunctionWorker.clear_cache()
 
     def _batch_update_dependents(self):
+        print(f"[DEBUG] Batch update for: {self._pending_const_updates}")
         const_names = list(self._pending_const_updates)
         self._pending_const_updates.clear()
         for cname in const_names:
             self._update_dependent_functions(cname)
 
     def _update_dependent_functions(self, const_name):
+        print(f"[DEBUG] Update dependents of {const_name}: {self.constant_dependents.get(const_name, set())}")
         if const_name not in self.constant_dependents:
             return
         for cid in self.constant_dependents[const_name].copy():
+            print(f"[DEBUG] Will update cell {cid}")
             if cid in self.cells:
-                self.update_single_function(cid)
+                self.cells[cid].update_function()
 
     def update_cell_dependencies(self, cell_id, const_names):
         for cname in list(self.constant_dependents.keys()):
@@ -442,6 +447,7 @@ class MainWindow(QMainWindow):
 
     # ---------- Вычисления ----------
     def update_single_function(self, cell_id):
+        print(f"[DEBUG] Updating cell {cell_id}")
         if cell_id not in self.cells:
             return
         cell = self.cells[cell_id]

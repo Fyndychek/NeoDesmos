@@ -42,12 +42,15 @@ class FunctionParser:
                 elif func_str.lower().startswith('y ='):
                     expr = func_str[3:].strip()
 
+            print(f"[DEBUG] Parse: {func_str}, var={var}, known_constants={set(self.constants.keys())}")
             identifiers = set(re.findall(r'\b[a-zA-Z]+\b', expr))
+            print(f"[DEBUG] identifiers={identifiers}")
             reserved = set(['x', 'y', 'e', 'pi'] + list(self.functions.keys()))
             unknown = identifiers - reserved
             known_constants = set(self.constants.keys())
             unknown -= known_constants
             used_constants.update(unknown)
+            print(f"[DEBUG] used_constants={used_constants}")
 
             has_var = bool(re.search(r'\b' + var + r'\b', expr))
 

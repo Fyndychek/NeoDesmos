@@ -62,6 +62,7 @@ class FunctionWorker(QRunnable):
         return segments_x, segments_y
 
     def run(self):
+        print(f"[DEBUG] Worker for cell {self.cell_id}, range {self.range_param}, func_str={self.func_str}")
         try:
             t_min, t_max = self.range_param
             if not np.isfinite(t_min) or not np.isfinite(t_max):
@@ -72,6 +73,7 @@ class FunctionWorker(QRunnable):
 
             cached = self.get_from_cache(key)
             if cached is not None:
+                print(f"[DEBUG] Cache hit for cell {self.cell_id}, key={key}")
                 if self._is_cancelled:
                     return
                 self.signals.finished.emit(cached[0], cached[1], self.func_str, self.cell_id)

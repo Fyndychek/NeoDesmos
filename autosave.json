@@ -2,7 +2,7 @@
   "version": 1,
   "constants": {
     "k": {
-      "value": 6.120000000000001,
+      "value": 1.0,
       "min": -10,
       "max": 10
     }
@@ -10,27 +10,42 @@
   "cells": [
     {
       "text": "sin(x)",
+      "color": "#F7B05E",
+      "visible": true
+    },
+    {
+      "text": "y=k",
       "color": "#FF6B6B",
       "visible": true
     },
     {
-      "text": "cos(x)",
-      "color": "#00ff7f",
+      "text": "",
+      "color": "#98D8C8",
       "visible": true
     },
     {
-      "text": "x=y(1+sin(y))",
-      "color": "#45B7D1",
+      "text": "",
+      "color": "#F7B05E",
       "visible": true
     },
     {
-      "text": "y=k*x",
-      "color": "#96CEB4",
+      "text": "",
+      "color": "#98D8C8",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#F7B05E",
       "visible": true
     },
     {
       "text": "",
       "color": "#FFEAA7",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#DDA0DD",
       "visible": true
     }
   ]
