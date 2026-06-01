@@ -2,7 +2,7 @@
   "version": 1,
   "constants": {
     "k": {
-      "value": 34.0,
+      "value": 9.04,
       "min": -10,
       "max": 10
     },
@@ -161,6 +161,21 @@
     {
       "text": "",
       "color": "#FFEAA7",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#DDA0DD",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#98D8C8",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#F7B05E",
       "visible": true
     }
   ]
