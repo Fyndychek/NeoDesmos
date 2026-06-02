@@ -165,16 +165,8 @@ class MainWindow(QMainWindow):
         sidebar_layout.setContentsMargins(5, 5, 5, 5)
 
         info_label = QLabel(
-            "Неявное умножение: 2x, x sin(x), (x+1)(x-1)\n"
-            "Автоматическая отрисовка при вводе (задержка 0.5 сек)\n"
-            "Автоматическое обновление при масштабировании\n"
-            "Неявные функции вида x = f(y) (например, x = y(1+cos(y)))\n"
-            "Пользовательские константы: a = 3, b = -2.5\n\n"
-            "  y = sin(x)\n"
-            "  x = y(1+cos(y))\n"
-            "  2x sin(x)\n"
-            "  a = 5\n"
-            "  y = a * sin(x)"
+            
+           
         )
         info_label.setWordWrap(True)
         info_label.setStyleSheet("color: gray; font-size: 9px; padding: 5px; background-color: #F5F5F5; border-radius: 3px;")

@@ -36,7 +36,7 @@
     {
       "text": "sin(x)",
       "color": "#F7B05E",
-      "visible": true
+      "visible": false
     },
     {
       "text": "y=k",
@@ -56,20 +56,20 @@
     {
       "text": "tg(x)",
       "color": "#F7B05E",
-      "visible": true
+      "visible": false
     },
     {
       "text": "y=m*x+2x",
       "color": "#96CEB4",
-      "visible": true
+      "visible": false
     },
     {
       "text": "y=1/x",
       "color": "#98D8C8",
-      "visible": true
+      "visible": false
     },
     {
-      "text": "",
+      "text": "y=e^x",
       "color": "#F7B05E",
       "visible": true
     },
@@ -106,6 +106,16 @@
     {
       "text": "",
       "color": "#98D8C8",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#F7B05E",
+      "visible": true
+    },
+    {
+      "text": "",
+      "color": "#FF6B6B",
       "visible": true
     }
   ]
